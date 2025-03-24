@@ -1,6 +1,7 @@
 // Install EJS, Express, and MongoDB in Terminal
 
 const express = require("express");
+const { request } = require("http");
 const mongoose = require("mongoose");
 
 const app = express();
@@ -26,10 +27,22 @@ const Country = mongoose.model("Country", countrySchema, "Countries");
 
 // Create a POST route for "/add/country" that adds a country using the request body (3 points)
 // Use postman to add at least THREE different countries
+app.post("/add/country",async(req,res)=>{
+  const country = await new Country({
+    country:req.bodycountry,
+    flagURL:req.body.flagURL,
+    population:req.body.population,
+    officialLanguage:req.body.officialLanguage,
+    hasNuclearWeapons:req.body.hasNuclearWeapons,
 
+  })
+})
 
 // Create a GET route for "/" that renders countries.ejs with every country from the Countries collection (1 point)
-
+app.get("/",async(req,res)=>{
+  const countries = await Country.find({})
+  res.render("countries.ejs", countries)
+})
 
 // Go to countries.ejs and follow the tasks there (2 points)
 
