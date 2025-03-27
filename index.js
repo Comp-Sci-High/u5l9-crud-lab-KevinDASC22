@@ -1,6 +1,7 @@
 // Install EJS, Express, and MongoDB in Terminal
 
 const express = require("express");
+const req = require("express/lib/request");
 const { request } = require("http");
 const mongoose = require("mongoose");
 
@@ -34,14 +35,14 @@ app.post("/add/country",async(req,res)=>{
     population:req.body.population,
     officialLanguage:req.body.officialLanguage,
     hasNuclearWeapons:req.body.hasNuclearWeapons,
-
-  })
+  }).save()
+    res.json(country)
 })
 
 // Create a GET route for "/" that renders countries.ejs with every country from the Countries collection (1 point)
 app.get("/",async(req,res)=>{
   const countries = await Country.find({})
-  res.render("countries.ejs", countries)
+  res.render("countries.ejs", {countries})
 })
 
 // Go to countries.ejs and follow the tasks there (2 points)
@@ -49,17 +50,27 @@ app.get("/",async(req,res)=>{
 
 // Create a dynamic PATCH route handler for "/update/{name}" that modifies the population of the country specified in the path (3 points)
 // Test this route on post man
-
+app.patch("/update/:name",async(req,res)=>{
+const repopulate = await Country.findOneAndUpdate({
+  
+})
+})
 
 
 // Create a DELETE route handler for "/delete/country" that deletes a country of your choice (3 points)
 // Test this route on post man
-
+app.delete("/delete/country",async(req,res)=>{
+  const dissapear = await Country.findOneAndDelete({
+   country:"Switzerland"
+  })
+  res.json(dissapear)
+})
 
 async function startServer() {
   
     // add your SRV string with a database called countries
-  await mongoose.connect("...");
+
+  await mongoose.connect("mongodb+srv://SE12:CSH2025@cluster0.ugaf5.mongodb.net/<countries>?retryWrites=true&w=majority&appName=Cluster0")
 
   app.listen(3000, () => {
     console.log("Server is running");
